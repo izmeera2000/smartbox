@@ -26,7 +26,6 @@ void setup() {
   Serial.begin(115200);
   pinMode(IRSensor, INPUT);
   Blynk.begin(auth, ssid, pass);
-
 }
 
 void loop() {
@@ -35,27 +34,24 @@ void loop() {
   if (sensorStatus == 1)                     // Check if the pin high or not
   {
     // Trigger notification
-    Serial.println("Item delivered");  
-  if (pbutton == 1) {
-    if (vpbutton == 0) {
-      digitalWrite(solenoidPin, HIGH);
-
-    } else {
-      digitalWrite(solenoidPin, LOW);
+    Serial.println("Item delivered");
+    if (pbutton == 1) {
+      if (vpbutton == 0) {
+        digitalWrite(solenoidPin, HIGH);
+        vpbutton == 1;
+      } else {
+        digitalWrite(solenoidPin, LOW);
+        vpbutton == 0;
+      }
     }
   }
 
-}
+  BLYNK_WRITE(V1) {
+    int pinValue = param.asInt();
 
-BLYNK_WRITE(V1) 
-{
-  int pinValue = param.asInt(); 
-
-  if (pinValue == 1){
+    if (pinValue == 1) {
       digitalWrite(solenoidPin, HIGH);
-  } else if (pinValue == 0) {
+    } else if (pinValue == 0) {
       digitalWrite(solenoidPin, LOW);
+    }
   }
-  
-
-}
